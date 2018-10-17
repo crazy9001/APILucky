@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'ApiController'], function () {
 
-    Route::resource('comment', 'ApiCommentcontroller');
+    Route::resource('comment', 'ApiCommentController');
 
     Route::post('comment/approve', [
         'as'    =>  'api.approve.comment',
