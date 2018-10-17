@@ -6,7 +6,7 @@
  * Time: 12:36 PM
  */
 
-namespace App\Http\Controllers\APIController;
+namespace App\Http\Controllers\ApiController;
 
 
 use App\Services\Repositories\Interfaces\CommentInterface;

@@ -6,7 +6,7 @@
  * Time: 12:38 PM
  */
 
-namespace App\Http\Controllers\APIController;
+namespace App\Http\Controllers\ApiController;
 
 use App\Http\Controllers\Controller as Controller;
 
