@@ -23,7 +23,7 @@ Route::group(['namespace' => 'ApiController'], function () {
 
     Route::post('comment/approve', [
         'as'    =>  'api.approve.comment',
-        'uses'  =>  'ApiCommentcontroller@approveComment'
+        'uses'  =>  'ApiCommentController@approveComment'
     ]);
 
 });
