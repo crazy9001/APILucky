@@ -19,7 +19,6 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                     if(isset($filters['status'])){
                         $que->where('status', '=', $filters['status']);
                     }
-
                 })
                 ->limit($filters['limit'])
                 ->offset($filters['offset'])

@@ -114,9 +114,12 @@ class ApiCommentController extends BaseApiController
      */
     public function destroy($id)
     {
-        $comment = $this->commentRepository->findById($id);
-        $comment->delete();
-        return $this->sendResponse('Đã xóa comment', 200);
+        $comment = $this->commentRepository->getFirstBy(['id' => $id]);
+        if($comment){
+            $comment->delete();
+            return $this->sendResponse('Đã xóa comment', 200);
+        }
+        return $this->sendError('Comment không tồn tại', 400);
     }
 
 }
