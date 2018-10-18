@@ -64,7 +64,8 @@ class ApiCommentController extends BaseApiController
 
         $comment = $this->commentRepository->getModel();
         $comment->fill($request->all());
-        $comment->avatar = isset($request->avatar) && !empty($request->avatar) ? $request->avatar : url('/') . '/storage/avatar.gif';
+        $comment->avatar = isset($request->avatar) && !empty($request->avatar) ? $request->avatar : url('/') . config('base.default_avatar');
+        $comment->giftImage = isset($request->giftImage) && !empty($request->giftImage) ? $request->giftImage : url('/') . config('base.default_gift');
         $comment->typeGift = 0;
         $comment->status = 0;
         //save comment

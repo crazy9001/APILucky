@@ -18,6 +18,8 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                 ->where(function ($que) use ($filters){
                     if(isset($filters['status'])){
                         $que->where('status', '=', $filters['status']);
+                    }else{
+                        $que->where('status', '=', 1);
                     }
                 })
                 ->limit($filters['limit'])

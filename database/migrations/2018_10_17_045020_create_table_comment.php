@@ -19,6 +19,7 @@ class CreateTableComment extends Migration
             $table->string('avatar')->nullable();
             $table->text('contentMessage')->nullable();
             $table->tinyInteger('typeGift')->default(0);
+            $table->string('giftImage')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
