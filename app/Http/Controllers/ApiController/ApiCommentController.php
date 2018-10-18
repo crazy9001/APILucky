@@ -10,6 +10,7 @@ namespace App\Http\Controllers\ApiController;
 
 
 use App\Services\Repositories\Interfaces\CommentInterface;
+use Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use Validator;
@@ -87,11 +88,13 @@ class ApiCommentController extends BaseApiController
             return $this->sendError($validator->errors()->first(), 400);
         }
 
-        $comment = $this->commentRepository->findById($request->id);
-        $comment->status = 1;
-        $this->commentRepository->createOrUpdate($comment);
-        return $this->sendResponse($comment, 'Success');
-
+        $comment = $this->commentRepository->getFirstBy(['id' => $request->id]);
+        if($comment){
+            $comment->status = 1;
+            $this->commentRepository->createOrUpdate($comment);
+            return $this->sendResponse($comment, 'Success');
+        }
+        return $this->sendError('Comment không tồn tại', 400);
     }
 
     /**
