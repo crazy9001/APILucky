@@ -161,6 +161,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Services\ApiServiceProvider::class,
         Ejarnutowski\LaravelApiKey\Providers\ApiKeyServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*
