@@ -19,5 +19,5 @@ class Comment extends Model
 
     protected $softDelete = true;
 
-    protected $fillable = ['fullName', 'avatar', 'contentMessage', 'typeGift', 'giftImage', 'status'];
+    protected $fillable = ['fullName', 'avatar', 'contentMessage', 'typeGift', 'giftImage', 'status', 'userId'];
 }

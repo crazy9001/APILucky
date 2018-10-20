@@ -10,6 +10,7 @@ namespace App\Http\Controllers\ApiController;
 
 
 use App\Services\Repositories\Interfaces\CommentInterface;
+use Carbon\Carbon;
 use Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -51,26 +52,37 @@ class ApiCommentController extends BaseApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'avatar'    =>'required',
             'fullName' => 'required',
             'contentMessage' =>  'required',
         ],
         [
+            'avatar.required'   =>  'Chưa nhập avatar',
             'fullName.required' =>  'Chưa nhập họ tên',
             'contentMessage.required'   =>  'Chưa nhập nội dung'
         ]);
         if( $validator->fails() ){
             return $this->sendError($validator->errors()->first(), 400);
         }
-
-        $comment = $this->commentRepository->getModel();
-        $comment->fill($request->all());
-        $comment->avatar = isset($request->avatar) && !empty($request->avatar) ? $request->avatar : url('/') . config('base.default_avatar');
-        $comment->giftImage = isset($request->giftImage) && !empty($request->giftImage) ? $request->giftImage : url('/') . config('base.default_gift');
-        $comment->typeGift = 0;
-        $comment->status = 0;
-        //save comment
-        $comment = $this->commentRepository->createOrUpdate($comment);
-        return $this->sendResponse($comment, 'Success');
+        $findLastComment = $this->commentRepository->getLastCommentbyUserId($request->avatar);
+        if($findLastComment){
+            $timeLastComment = $findLastComment->created_at;
+            $diff_in_minutes = $timeLastComment->diffInMinutes(Carbon::now());
+        }else{
+            $diff_in_minutes = 1;
+        }
+        if($diff_in_minutes >= 1){
+            $comment = $this->commentRepository->getModel();
+            $comment->fill($request->all());
+            $comment->userId = $request->avatar;
+            $comment->giftImage = isset($request->giftImage) && !empty($request->giftImage) ? $request->giftImage : url('/') . config('base.default_gift');
+            $comment->typeGift = 0;
+            $comment->status = 0;
+            //save comment
+            $comment = $this->commentRepository->createOrUpdate($comment);
+            return $this->sendResponse($comment, 'Success');
+        }
+        return $this->sendError('Vui lòng chờ 1 phút để tiếp tục', 400);
     }
 
     /**

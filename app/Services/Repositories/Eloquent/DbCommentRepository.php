@@ -27,4 +27,13 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                 ->orderBy((isset($sortInfo['column']) && !empty($sortInfo['column'])) ? $sortInfo['column'] : 'created_at', (isset($sortInfo['order']) && !empty($sortInfo['order'])) ? $sortInfo['order'] : 'desc' );
         return $query;
     }
+
+    public function getLastCommentbyUserId($userId)
+    {
+        $result = $this->getModel()
+                ->where('userId', '=', $userId)
+                ->orderBy('id', 'DESC')
+                ->first();
+        return $result;
+    }
 }
