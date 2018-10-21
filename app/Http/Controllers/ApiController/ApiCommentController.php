@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use Validator;
 use Log;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class ApiCommentController extends BaseApiController
 {
@@ -105,6 +107,21 @@ class ApiCommentController extends BaseApiController
         if($comment){
             $comment->status = 1;
             $this->commentRepository->createOrUpdate($comment);
+
+            $client = new Client();
+            try{
+                $client->get('https://recorder.vtv.vn/api/users', [
+                    'query' =>  [
+                        'avatar'    =>  $comment->avatar,
+                        'fullName'  =>  $comment->fullName,
+                        'contentMessage'    =>  $comment->contentMessage,
+                    ]
+                ]);
+            }catch (RequestException $e){
+                $response = $e->getResponse();
+                return $this->sendError($response, 400);
+            }
+
             return $this->sendResponse($comment, 'Success');
         }
         return $this->sendError('Comment không tồn tại', 400);
