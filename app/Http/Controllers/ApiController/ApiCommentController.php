@@ -57,12 +57,20 @@ class ApiCommentController extends BaseApiController
             'avatar'    =>'required',
             'fullName' => 'required',
             'contentMessage' =>  'required',
+            'file' => 'sometimes|image|max:2048|mimes:jpeg,png,jpg,gif,svg',
         ],
         [
             'avatar.required'   =>  'Chưa nhập avatar',
             'fullName.required' =>  'Chưa nhập họ tên',
-            'contentMessage.required'   =>  'Chưa nhập nội dung'
+            'contentMessage.required'   =>  'Chưa nhập nội dung',
+            'file.required' =>  'Vui lòng chọn file',
+            'file.mimes'    =>  'Dữ liệu không hợp lệ',
+            'file.max'  =>  'Dữ liệu quá lớn'
         ]);
+        $path = '';
+        if($request->file('file')){
+            $path = $request->file('file')->store('file');
+        }
         if( $validator->fails() ){
             return $this->sendError($validator->errors()->first(), 400);
         }
@@ -80,6 +88,7 @@ class ApiCommentController extends BaseApiController
             $comment->giftImage = isset($request->giftImage) && !empty($request->giftImage) ? $request->giftImage : url('/') . config('base.default_gift');
             $comment->typeGift = 0;
             $comment->status = 0;
+            $comment->images = $path;
             //save comment
             $comment = $this->commentRepository->createOrUpdate($comment);
             return $this->sendResponse($comment, 'Success');
