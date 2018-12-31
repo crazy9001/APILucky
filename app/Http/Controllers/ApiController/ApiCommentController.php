@@ -124,6 +124,7 @@ class ApiCommentController extends BaseApiController
                         'avatar'    =>  $comment->avatar,
                         'fullName'  =>  $comment->fullName,
                         'contentMessage'    =>  $comment->contentMessage,
+                        'images'    =>  $comment->images
                     ]
                 ]);
             }catch (RequestException $e){
