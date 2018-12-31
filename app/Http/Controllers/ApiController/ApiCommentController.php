@@ -38,13 +38,15 @@ class ApiCommentController extends BaseApiController
     public function index()
     {
         $status = Input::get('status');
+        $images = Input::get('images');
         $limit = Input::get('limit') ? Input::get('limit') : 20;
         $pageId = Input::get('pageId') ? Input::get('pageId') : 1;
         $offset = ($pageId - 1) * $limit;
         $filters = array(
             'limit' => trim($limit),
             'offset' => trim($offset),
-            'status'  => $status
+            'status'  => $status,
+            'images'    => $images
         );
         $query = $this->commentRepository->getAllComment($filters);
         $comments = $query->get();
@@ -67,7 +69,7 @@ class ApiCommentController extends BaseApiController
             'file.mimes'    =>  'Dữ liệu không hợp lệ',
             'file.max'  =>  'Dữ liệu quá lớn'
         ]);
-        $path = '';
+        $path = null;
         if($request->file('file')){
             $path = $request->file('file')->store('file');
         }
@@ -163,6 +165,24 @@ class ApiCommentController extends BaseApiController
             return $this->sendResponse('Đã xóa comment', 200);
         }
         return $this->sendError('Comment không tồn tại', 400);
+    }
+
+    public function getTopComment()
+    {
+        $status = Input::get('status');
+        $images = Input::get('images');
+        $limit = Input::get('limit') ? Input::get('limit') : 20;
+        $pageId = Input::get('pageId') ? Input::get('pageId') : 1;
+        $offset = ($pageId - 1) * $limit;
+        $filters = array(
+            'limit' => trim($limit),
+            'offset' => trim($offset),
+            'status'  => $status,
+            'images'    => $images
+        );
+        $query = $this->commentRepository->getTopComment($filters);
+        $comments = $query->get();
+        return $this->sendResponse($comments, 'Success');
     }
 
 }

@@ -9,6 +9,7 @@
 namespace App\Services\Repositories\Eloquent;
 
 use App\Services\Repositories\Interfaces\CommentInterface;
+use DB;
 
 class DbCommentRepository extends RepositoriesAbstract implements CommentInterface
 {
@@ -20,6 +21,9 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                         $que->where('status', '=', $filters['status']);
                     }else{
                         $que->where('status', '=', 1);
+                    }
+                    if(isset($filters['images']) && $filters['images'] == 1){
+                        $que->whereNotNull('images');
                     }
                 })
                 ->limit($filters['limit'])
@@ -36,4 +40,26 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                 ->first();
         return $result;
     }
+
+    public function getTopComment(array $filters)
+    {
+        $query = $this->getModel()
+                ->where(function ($que) use ($filters){
+                    if(isset($filters['status'])){
+                        $que->where('status', '=', $filters['status']);
+                    }else{
+                        $que->where('status', '=', 1);
+                    }
+                    if(isset($filters['images']) && $filters['images'] == 1){
+                        $que->whereNotNull('images');
+                    }
+                })
+                ->limit($filters['limit'])
+                ->offset($filters['offset'])
+                ->select('userId', DB::raw('COUNT(id) as comment'))
+                ->groupBy('userId')
+                ->orderBy(DB::raw('COUNT(id)'), 'DESC');
+        return $query;
+    }
+
 }

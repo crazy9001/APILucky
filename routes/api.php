@@ -26,4 +26,9 @@ Route::group(['namespace' => 'ApiController', 'middleware' => 'auth.apikey'], fu
         'uses'  =>  'ApiCommentController@approveComment'
     ]);
 
+    Route::get('top/comment', [
+        'as'    =>  'api.top.comment',
+        'uses'  =>  'ApiCommentController@getTopComment'
+    ]);
+
 });

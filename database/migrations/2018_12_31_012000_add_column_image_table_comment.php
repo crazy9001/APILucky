@@ -14,7 +14,7 @@ class AddColumnImageTableComment extends Migration
     public function up()
     {
         Schema::table('comments', function ($table) {
-            $table->string('images')->after('contentMessage'); //the after method is optional.
+            $table->string('images')->after('contentMessage')->nullable(); //the after method is optional.
         });
     }
 
