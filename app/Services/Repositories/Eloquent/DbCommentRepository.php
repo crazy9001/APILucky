@@ -56,7 +56,7 @@ class DbCommentRepository extends RepositoriesAbstract implements CommentInterfa
                 })
                 ->limit($filters['limit'])
                 ->offset($filters['offset'])
-                ->select('userId', DB::raw('COUNT(id) as comment'))
+                ->select('userId', 'fullName', DB::raw('COUNT(id) as countComment'))
                 ->groupBy('userId')
                 ->orderBy(DB::raw('COUNT(id)'), 'DESC');
         return $query;
