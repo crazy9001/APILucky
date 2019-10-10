@@ -239,6 +239,7 @@ class ApiCommentController extends BaseApiController
     public function receive(Request $request)
     {
         $input = $request->all();
+
         $item = $input['entry'][0]['changes'][0]['value']['item'];
         $from =$input['entry'][0]['changes'][0]['value']['from'];
         $post_id = $input['entry'][0]['changes'][0]['value']['post_id'];
@@ -276,6 +277,11 @@ class ApiCommentController extends BaseApiController
                 $comment = $this->commentRepository->createOrUpdate($comment);
                 return $this->sendResponse($comment, 'Success');
             }
+        }
+
+
+        if($input['hub_verify_token'] == '123@123') {
+            return response()->json($input['hub_challenge'], 200);
         }
 
     }
