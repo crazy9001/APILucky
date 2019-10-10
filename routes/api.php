@@ -37,7 +37,6 @@ Route::group(['namespace' => 'ApiController'], function () {
     ]);
 
     Route::get('/trivia', [
-        'middleware'    =>  'facebookVerify',
         'as'    =>  'api.facebook.very',
         'uses'  =>  'ApiCommentController@getReceive'
     ]);

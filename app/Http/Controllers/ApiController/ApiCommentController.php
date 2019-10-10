@@ -228,9 +228,11 @@ class ApiCommentController extends BaseApiController
         }
     }
 
-    public  function  getReceive(Request $request){
-        if ($request->input("hub_verify_token") === env("MESSENGER_VERIFY_TOKEN")) {
-            return response($request->input("hub_challenge"), 200);
+    public  function  getReceive(){
+        $hub_verify_token = Input::get('hub_verify_token');
+        $hub_challenge = Input::get('hub_challenge');
+        if($hub_verify_token == '123@123') {
+            return response()->json($hub_challenge, 200);
         }
     }
 
