@@ -249,9 +249,8 @@ class ApiCommentController extends BaseApiController
                 if($item=='comment' && $postConfig== $post_id){
                     $fullname = $from['name'];
                     $id = $from['id'];
-                    $message = $message;
-
                     $comment = $this->commentRepository->getModel();
+                    $comment->userId = $id;
                     $comment->avatar = $id;
                     $comment->fullName=$fullname;
                     $comment->contentMessage = $message;
@@ -265,9 +264,8 @@ class ApiCommentController extends BaseApiController
             if($item=='comment'){
                 $fullname = $from['name'];
                 $id = $from['id'];
-                $message = $message;
-
                 $comment = $this->commentRepository->getModel();
+                $comment->userId = $id;
                 $comment->avatar = $id;
                 $comment->fullName=$fullname;
                 $comment->contentMessage = $message;
@@ -278,7 +276,6 @@ class ApiCommentController extends BaseApiController
                 return $this->sendResponse($comment, 'Success');
             }
         }
-
 
         if($input['hub_verify_token'] == '123@123') {
             return response($input['hub_challenge'], 200);
