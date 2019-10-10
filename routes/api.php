@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'ApiController', 'middleware' => 'auth.apikey'], function () {
+Route::group(['namespace' => 'ApiController'], function () {
 
     Route::resource('comment', 'ApiCommentController');
 
@@ -29,6 +29,11 @@ Route::group(['namespace' => 'ApiController', 'middleware' => 'auth.apikey'], fu
     Route::get('top/comment', [
         'as'    =>  'api.top.comment',
         'uses'  =>  'ApiCommentController@getTopComment'
+    ]);
+
+    Route::get('/comments/{pageId}/{postId}', [
+        'as'    =>  'api.get.list.comment.facebook',
+        'uses'  =>  'ApiCommentController@getListComment'
     ]);
 
 });

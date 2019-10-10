@@ -11,6 +11,8 @@ namespace App\Http\Controllers\ApiController;
 
 use App\Services\Repositories\Interfaces\CommentInterface;
 use Carbon\Carbon;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 use Storage;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -18,18 +20,25 @@ use Validator;
 use Log;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Facebook\Facebook;
 
 class ApiCommentController extends BaseApiController
 {
     protected $commentRepository;
 
+    protected $api;
+
     /**
      * ApiCommentController constructor.
      * @param CommentInterface $commentRepository
      */
-    public function __construct(CommentInterface $commentRepository)
+    public function __construct(
+        CommentInterface $commentRepository,
+        Facebook $fb
+    )
     {
         $this->commentRepository = $commentRepository;
+        $this->api = $fb;
     }
 
     /**
@@ -183,6 +192,40 @@ class ApiCommentController extends BaseApiController
         $query = $this->commentRepository->getTopComment($filters);
         $comments = $query->get();
         return $this->sendResponse($comments, 'Success');
+    }
+
+    public function getListComment($pageId, $postId)
+    {
+        try {
+            $comment = $this->api->get($postId . '/comments');
+            $comment = $comment->getDecodedBody();
+            return $this->sendResponse($comment);
+        } catch (FacebookSDKException $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
+
+    protected function getPageAccessToken($pageId)
+    {
+        try {
+            $response = $this->api->get('/me/accounts');
+        } catch (FacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+        try {
+            $pages = $response->getGraphEdge()->asArray();
+            foreach ($pages as $key) {
+                if ($key['id'] == $pageId) {
+                    return $key['access_token'];
+                }
+            }
+        } catch (FacebookSDKException $e) {
+            echo $e->getMessage();
+        }
     }
 
 }

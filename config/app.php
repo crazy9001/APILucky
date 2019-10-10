@@ -162,6 +162,7 @@ return [
         App\Services\ApiServiceProvider::class,
         Ejarnutowski\LaravelApiKey\Providers\ApiKeyServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        App\Providers\FacebookServiceProvider::class,
     ],
 
     /*
