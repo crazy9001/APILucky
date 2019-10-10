@@ -232,7 +232,7 @@ class ApiCommentController extends BaseApiController
         $hub_verify_token = Input::get('hub_verify_token');
         $hub_challenge = Input::get('hub_challenge');
         if($hub_verify_token == '123@123') {
-            return response()->json($hub_challenge, 200);
+            return response($hub_challenge, 200);
         }
     }
 
@@ -281,7 +281,7 @@ class ApiCommentController extends BaseApiController
 
 
         if($input['hub_verify_token'] == '123@123') {
-            return response()->json($input['hub_challenge'], 200);
+            return response($input['hub_challenge'], 200);
         }
 
     }
