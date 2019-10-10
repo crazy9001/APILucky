@@ -228,4 +228,48 @@ class ApiCommentController extends BaseApiController
         }
     }
 
+    public function receive(Request $request)
+    {
+        $input = $request->all();
+        $item = $input['entry'][0]['changes'][0]['value']['item'];
+        $from =$input['entry'][0]['changes'][0]['value']['from'];
+        $post_id = $input['entry'][0]['changes'][0]['value']['post_id'];
+        $message = $input['entry'][0]['changes'][0]['value']['message'];
+        $postConfig =  env('POST_ID_CONFIG', '');
+        if($postConfig){
+                if($item=='comment' && $postConfig== $post_id){
+                    $fullname = $from['name'];
+                    $id = $from['id'];
+                    $message = $message;
+
+                    $comment = $this->commentRepository->getModel();
+                    $comment->avatar = $id;
+                    $comment->fullName=$fullname;
+                    $comment->contentMessage = $message;
+                    $comment->typeGift = 0;
+                    $comment->status = 0;
+                    $comment->images = '';
+                    $comment = $this->commentRepository->createOrUpdate($comment);
+                    return $this->sendResponse($comment, 'Success');
+                }
+        }else{
+            if($item=='comment'){
+                $fullname = $from['name'];
+                $id = $from['id'];
+                $message = $message;
+
+                $comment = $this->commentRepository->getModel();
+                $comment->avatar = $id;
+                $comment->fullName=$fullname;
+                $comment->contentMessage = $message;
+                $comment->typeGift = 0;
+                $comment->status = 0;
+                $comment->images = '';
+                $comment = $this->commentRepository->createOrUpdate($comment);
+                return $this->sendResponse($comment, 'Success');
+            }
+        }
+
+    }
+
 }
