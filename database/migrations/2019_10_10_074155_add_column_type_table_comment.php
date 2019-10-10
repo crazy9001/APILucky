@@ -14,7 +14,7 @@ class AddColumnTypeTableComment extends Migration
     public function up()
     {
         Schema::table('comments', function($table) {
-            $table->tinyInteger('type')->default(1)->after('status')->comment('1: is from facebook, 2: from vtv.vn');
+            $table->tinyInteger('type')->default(0)->after('status')->comment('1: is from facebook, 2: from vtv.vn');
         });
     }
 

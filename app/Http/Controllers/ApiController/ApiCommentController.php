@@ -253,6 +253,7 @@ class ApiCommentController extends BaseApiController
                     $comment->userId = $id;
                     $comment->avatar = $id;
                     $comment->fullName=$fullname;
+                    $comment->type = 1;
                     $comment->contentMessage = $message;
                     $comment->typeGift = 0;
                     $comment->status = 0;
@@ -268,6 +269,7 @@ class ApiCommentController extends BaseApiController
                 $comment->userId = $id;
                 $comment->avatar = $id;
                 $comment->fullName=$fullname;
+                $comment->type = 1;
                 $comment->contentMessage = $message;
                 $comment->typeGift = 0;
                 $comment->status = 0;
